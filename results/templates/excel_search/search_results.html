@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iauth Exam results 2024</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        .header-image {
+        height: auto; /* Reset height to auto for printing */
+        width: auto; /* Reset width to auto for printing */
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif; /* Apply Arial font to the entire body */
+            color: #A31E28; /* Default text color */
+            position: relative; /* Make the body position relative to contain absolute elements */
+        }
+        .top-section {
+            border: 6px solid #75526e; /* Thick double line border */
+            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+            margin-bottom: 20px; /* Set the gap between sections */
+            padding: 10px;
+        }
+        .middle-section {
+            border: 6px solid #75526e; /* Thick double line border */
+            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+            margin-bottom: 20px; /* Set the gap between sections */
+            padding: 10px;
+        }
+        .bottom-section {
+            border: 6px solid #75526e; /* Thick double line border */
+            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+            margin-bottom: 20px; /* Set the gap between sections */
+            padding: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 20px;
+            color: #fff; /* Heading color */
+        }
+        table {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 2px;
+            text-align: left;
+            border: 1px solid #d61313; /* Add border to cells */
+            font-family: Arial, sans-serif; /* Apply Arial font */
+        }
+        th {
+            background-color: #0e9593; /* Table header background color */
+            color: #f5f5f0; /* Table header text color */
+            height: 10px;
+        }
+        .subject-field-name {
+            font-family: 'https://urdufonts.net/fonts/alqalam-fahad-regular', Arial, sans-serif;
+            font-size: 30px;
+            text-align: center;
+            color: #58221C; /* Subject field name color */
+        }
+        .fail {
+            background-color: #f8b0b0; /* Light red color */
+        }
+        .middle-section td:nth-child(2),
+        .middle-section td:nth-child(3),
+        .middle-section td:nth-child(4) {
+            text-align: center;
+            font-size: 24px;
+        }
+        .bottom-section {
+            font-weight: bold;
+            text-align: center;
+            font-size: 24px;
+            color: #0F0000; /* Text color */
+        }
+        .bottom-section td {
+            text-align: center;
+        }
+        .header-image {
+    display: block; /* Ensures the image is displayed as a block element */
+    margin: 0 auto; /* Center horizontally */
+    padding: 10px;
+    height: 200px;
+    margin-left: auto;
+   padding-top: 15px;
+}
+
+       /* Logo watermark */
+         .watermark {
+            position: absolute;
+            width: 350px;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.2 /* Adjust opacity as needed */
+        }
+
+    </style>
+</head>
+<body>
+ 
+    
+    <!-- Header image -->
+    <img class="header-image" src="{% static 'images/header.jpg' %}" alt="Header Image">
+    <img class="watermark" src="{% static 'images/logo.png' %}" alt="Logo Watermark">
+
+
+
+    <h1>Iauth Exam results 2024</h1>
+    
+    {% if message %}
+    <p>{{ message }}</p>
+    {% else %}
+
+    <!-- Student Details Section -->
+    <table class="floral-border">
+        <thead>
+            <tr>
+                <th colspan="2"><h1 style="color: white;">Student Details</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in top_section_data.items %}
+                <tr>
+                    <td style="text-align: center; font-family: 'https://urdulabs.com/fonts/ul-sajid-heading'; font-size: 30px;">{{ key }}</td>
+                    <td style="text-align: center; font-family: 'https://urdufonts.net/fonts/ul-sajid-heading-regular'; font-size: 24px;font-weight: bold;">{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Middle Section -->
+<!-- Subject Section -->
+<table class="floral-border">
+    <thead>
+        <tr>
+            <th style="text-align: center;">Subject</th>
+            <th style="text-align: center;">Max Marks</th>
+            <th style="text-align: center;">Marks Gained</th>
+            <th style="text-align: center;">Pass/Fail</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for key, value in middle_section_data.items %}
+            <tr>
+                <td class="subject-field-name">{{ key }}</td>
+                <td style="text-align: center; font-size: 24px;">100</td> <!-- Assuming maximum marks for each subject is 100 -->
+                <td style="text-align: center; font-size: 24px;">{{ value }}</td>  <!-- Marks gained by the student in this subject -->
+                <td style="text-align: center; font-size: 24px;" class="{% if value < 35 %}fail{% endif %}">
+                    {% if value >= 35 %}
+                        Pass
+                    {% else %}
+                        Fail
+                    {% endif %}
+                </td>  <!-- Check if the student passed or failed -->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+     
+    <!-- Summary Section -->
+<table class="floral-border bottom-section">
+    <thead>
+        <tr>
+            <th colspan="2"><h1>Summary</h1></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, value in bottom_section_data.items %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{% if value == 'nan' %} ---- {% else %} {{ value }} {% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    {% endif %}
+</body>
+</html>
+    
+
+   
