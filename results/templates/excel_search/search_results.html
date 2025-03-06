@@ -42,13 +42,13 @@
         }
         h1 {
             text-align: center;
-            color: #2c3e50; /* Dark blue for heading */
+            color: #2c3e50;
             margin-bottom: 10px;
             font-size: 24px;
         }
         .subheading {
             text-align: center;
-            color: #7f8c8d; /* Gray for subheading */
+            color: #7f8c8d;
             font-size: 16px;
             margin-bottom: 20px;
         }
@@ -59,7 +59,7 @@
             overflow: hidden;
         }
         .section h2 {
-            background-color: #3498db; /* Blue for section headers */
+            background-color: #3498db;
             color: white;
             padding: 10px;
             margin: 0;
@@ -75,17 +75,17 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #ecf0f1; /* Light gray for table headers */
-            color: #2c3e50; /* Dark blue for text */
+            background-color: #ecf0f1;
+            color: #2c3e50;
             font-weight: bold;
         }
         td {
-            color: #34495e; /* Darker gray for values */
+            color: #34495e;
         }
         .highlight {
             font-weight: bold;
-            color: #c0392b; /* Red for important values */
-            background-color: #FFD700; /* Gold background */
+            color: #c0392b;
+            background-color: #FFD700;
             padding: 3px 6px;
             border-radius: 5px;
         }
@@ -93,14 +93,14 @@
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #3498db; /* Blue for link */
+            color: #3498db;
             text-decoration: none;
         }
         .back-link:hover {
             text-decoration: underline;
         }
         .error {
-            color: #e74c3c; /* Red for errors */
+            color: #e74c3c;
             text-align: center;
             margin: 20px 0;
         }
@@ -108,9 +108,10 @@
 </head>
 <body>
     <div class="container">
-        <img src="{% static 'results/images/Idara logo.jpg' %}" class="round-logo" alt="Idara Logo">
+        <!-- Logos -->
+        <img src="{% static 'images/idara_logo.jpg' %}" class="round-logo" alt="Idara Logo">
         <div class="header">
-            <img src="{% static 'results/images/Idara NAme logo.jpg' %}" class="name-logo" alt="Idara Name Logo">
+            <img src="{% static 'images/idara_name_logo.jpg' %}" class="name-logo" alt="Idara Name Logo">
         </div>
 
         {% if message %}
@@ -118,7 +119,10 @@
             <a href="{% url 'search_excel' %}" class="back-link">واپس تلاش کریں</a>
         {% else %}
             <h1>ادارہ اشرف العلوم ٹرسٹ سالانہ نتائج 2025</h1>
-            <p class="subheading">کلاس: <span class="highlight">{{ class_name }}</span> | داخلہ نمبر: <span class="highlight">{{ search_value }}</span></p>
+            <p class="subheading">
+                کلاس: <span class="highlight">{{ class_name }}</span> | 
+                داخلہ نمبر: <span class="highlight">{{ search_value }}</span>
+            </p>
 
             <!-- Top Section: Student Details -->
             <div class="section">
@@ -127,7 +131,7 @@
                     {% for key, value in top_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td class="{% if key in 'داخلہ نمبر, نام طالب علم' %}highlight{% endif %}">{{ value }}</td>
+                            <td class="{% if key == 'داخلہ نمبر' or key == 'نام طالب علم' %}highlight{% endif %}">{{ value }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -135,17 +139,17 @@
 
             <!-- Middle Section: Subject Marks -->
             {% if middle_section_data %}
-            <div class="section">
-                <h2>مضامین کے نمبرات</h2>
-                <table>
-                    {% for key, value in middle_section_data.items %}
-                        <tr>
-                            <th>{{ key }}</th>
-                            <td>{{ value }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
+                <div class="section">
+                    <h2>مضامین کے نمبرات</h2>
+                    <table>
+                        {% for key, value in middle_section_data.items %}
+                            <tr>
+                                <th>{{ key }}</th>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             {% endif %}
 
             <!-- Bottom Section: Results Summary -->
@@ -155,9 +159,7 @@
                     {% for key, value in bottom_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td class="{% if key in 'ہ, درجہ (Rank)' %}highlight{% endif %}">
-                                {{ value }}
-                            </td>
+                            <td class="{% if key == 'کل نمبرات' or key == 'درجہ (Rank)' %}highlight{% endif %}">{{ value }}</td>
                         </tr>
                     {% endfor %}
                 </table>
