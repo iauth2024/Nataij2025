@@ -1,195 +1,170 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iauth Exam results 2024</title>
+    <title>Student Report Card</title>
     <style>
-        @page {
-            size: A4;
-            margin: 0;
-        }
-
-        .header-image {
-        height: auto; /* Reset height to auto for printing */
-        width: auto; /* Reset width to auto for printing */
-        }
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif; /* Apply Arial font to the entire body */
-            color: #A31E28; /* Default text color */
-            position: relative; /* Make the body position relative to contain absolute elements */
+            padding: 20px;
+            direction: rtl; /* Right-to-left for Urdu */
         }
-        .top-section {
-            border: 6px solid #75526e; /* Thick double line border */
-            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
-            margin-bottom: 20px; /* Set the gap between sections */
-            padding: 10px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            text-align: center;
         }
-        .middle-section {
-            border: 6px solid #75526e; /* Thick double line border */
-            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
-            margin-bottom: 20px; /* Set the gap between sections */
-            padding: 10px;
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .bottom-section {
-            border: 6px solid #75526e; /* Thick double line border */
-            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
-            margin-bottom: 20px; /* Set the gap between sections */
-            padding: 10px;
+        .header img {
+            max-width: 100%;
+        }
+        .name-logo {
+            width: 300px; /* Adjust as needed */
+            margin-bottom: 10px;
+        }
+        .round-logo {
+            width: 120px; /* Adjust as needed */
+            position: absolute;
+            top: 10px;
+            left: 10px;
         }
         h1 {
             text-align: center;
-            margin-top: 5px;
-            font-size: 20px;
-            color: #fff; /* Heading color */
+            color: #2c3e50; /* Dark blue for heading */
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .subheading {
+            text-align: center;
+            color: #7f8c8d; /* Gray for subheading */
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .section h2 {
+            background-color: #3498db; /* Blue for section headers */
+            color: white;
+            padding: 10px;
+            margin: 0;
+            font-size: 18px;
         }
         table {
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
             border-collapse: collapse;
         }
         th, td {
-            padding: 2px;
-            text-align: left;
-            border: 1px solid #d61313; /* Add border to cells */
-            font-family: Arial, sans-serif; /* Apply Arial font */
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #0e9593; /* Table header background color */
-            color: #f5f5f0; /* Table header text color */
-            height: 10px;
-        }
-        .subject-field-name {
-            font-family: 'https://urdufonts.net/fonts/alqalam-fahad-regular', Arial, sans-serif;
-            font-size: 30px;
-            text-align: center;
-            color: #58221C; /* Subject field name color */
-        }
-        .fail {
-            background-color: #f8b0b0; /* Light red color */
-        }
-        .middle-section td:nth-child(2),
-        .middle-section td:nth-child(3),
-        .middle-section td:nth-child(4) {
-            text-align: center;
-            font-size: 24px;
-        }
-        .bottom-section {
+            background-color: #ecf0f1; /* Light gray for table headers */
+            color: #2c3e50; /* Dark blue for text */
             font-weight: bold;
+        }
+        td {
+            color: #34495e; /* Darker gray for values */
+        }
+        .highlight {
+            font-weight: bold;
+            color: #c0392b; /* Red for important values */
+            background-color: #FFD700; /* Gold background */
+            padding: 3px 6px;
+            border-radius: 5px;
+        }
+        .back-link {
+            display: block;
             text-align: center;
-            font-size: 24px;
-            color: #0F0000; /* Text color */
+            margin-top: 20px;
+            color: #3498db; /* Blue for link */
+            text-decoration: none;
         }
-        .bottom-section td {
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: #e74c3c; /* Red for errors */
             text-align: center;
+            margin: 20px 0;
         }
-        .header-image {
-    display: block; /* Ensures the image is displayed as a block element */
-    margin: 0 auto; /* Center horizontally */
-    padding: 10px;
-    height: 200px;
-    margin-left: auto;
-   padding-top: 15px;
-}
-
-       /* Logo watermark */
-         .watermark {
-            position: absolute;
-            width: 350px;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.2 /* Adjust opacity as needed */
-        }
-
     </style>
 </head>
 <body>
- 
-    
-    <!-- Header image -->
-    <img class="header-image" src="{% static 'images/header.jpg' %}" alt="Header Image">
-    <img class="watermark" src="{% static 'images/logo.png' %}" alt="Logo Watermark">
+    <div class="container">
+        <img src="{% static 'results/images/Idara logo.jpg' %}" class="round-logo" alt="Idara Logo">
+        <div class="header">
+            <img src="{% static 'results/images/Idara NAme logo.jpg' %}" class="name-logo" alt="Idara Name Logo">
+        </div>
 
+        {% if message %}
+            <p class="error">{{ message }}</p>
+            <a href="{% url 'search_excel' %}" class="back-link">واپس تلاش کریں</a>
+        {% else %}
+            <h1>ادارہ اشرف العلوم ٹرسٹ سالانہ نتائج 2025</h1>
+            <p class="subheading">کلاس: <span class="highlight">{{ class_name }}</span> | داخلہ نمبر: <span class="highlight">{{ search_value }}</span></p>
 
+            <!-- Top Section: Student Details -->
+            <div class="section">
+                <h2>طالب علم کی تفصیلات</h2>
+                <table>
+                    {% for key, value in top_section_data.items %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td class="{% if key in 'داخلہ نمبر, نام طالب علم' %}highlight{% endif %}">{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
 
-    <h1>Iauth Exam results 2024</h1>
-    
-    {% if message %}
-    <p>{{ message }}</p>
-    {% else %}
+            <!-- Middle Section: Subject Marks -->
+            {% if middle_section_data %}
+            <div class="section">
+                <h2>مضامین کے نمبرات</h2>
+                <table>
+                    {% for key, value in middle_section_data.items %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
 
-    <!-- Student Details Section -->
-    <table class="floral-border">
-        <thead>
-            <tr>
-                <th colspan="2"><h1 style="color: white;">Student Details</h1></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for key, value in top_section_data.items %}
-                <tr>
-                    <td style="text-align: center; font-family: 'https://urdulabs.com/fonts/ul-sajid-heading'; font-size: 30px;">{{ key }}</td>
-                    <td style="text-align: center; font-family: 'https://urdufonts.net/fonts/ul-sajid-heading-regular'; font-size: 24px;font-weight: bold;">{{ value }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <!-- Bottom Section: Results Summary -->
+            <div class="section">
+                <h2>نتائج کا خلاصہ</h2>
+                <table>
+                    {% for key, value in bottom_section_data.items %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td class="{% if key in 'ہ, درجہ (Rank)' %}highlight{% endif %}">
+                                {{ value }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
 
-    <!-- Middle Section -->
-<!-- Subject Section -->
-<table class="floral-border">
-    <thead>
-        <tr>
-            <th style="text-align: center;">Subject</th>
-            <th style="text-align: center;">Max Marks</th>
-            <th style="text-align: center;">Marks Gained</th>
-            <th style="text-align: center;">Pass/Fail</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-        {% for key, value in middle_section_data.items %}
-            <tr>
-                <td class="subject-field-name">{{ key }}</td>
-                <td style="text-align: center; font-size: 24px;">100</td> <!-- Assuming maximum marks for each subject is 100 -->
-                <td style="text-align: center; font-size: 24px;">{{ value }}</td>  <!-- Marks gained by the student in this subject -->
-                <td style="text-align: center; font-size: 24px;" class="{% if value < 35 %}fail{% endif %}">
-                    {% if value >= 35 %}
-                        Pass
-                    {% else %}
-                        Fail
-                    {% endif %}
-                </td>  <!-- Check if the student passed or failed -->
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-     
-    <!-- Summary Section -->
-<table class="floral-border bottom-section">
-    <thead>
-        <tr>
-            <th colspan="2"><h1>Summary</h1></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for key, value in bottom_section_data.items %}
-            <tr>
-                <td>{{ key }}</td>
-                <td>{% if value == 'nan' %} ---- {% else %} {{ value }} {% endif %}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-    {% endif %}
+            <a href="{% url 'search_excel' %}" class="back-link">دوسرا تلاش کریں</a>
+        {% endif %}
+    </div>
 </body>
 </html>
-    
-
-   

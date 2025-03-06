@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iauth results</title>
+    <title>طالب علم کی رپورٹ تلاش کریں</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        form {
-            background-color: #f4f4f3;
+        .container {
+            background: #ffffff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(16, 186, 192, 0.848);
-        }
-        h1 {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            color: #b21616;
+            width: 350px;
+        }
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
         }
         label {
+            font-size: 16px;
             font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
         }
-        select, input[type="text"], button {
+        input {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 34px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            text-align: center;
         }
         button {
-            background-color: #10772c;
+            background-color: #28a745;
             color: white;
             border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
         }
         button:hover {
-            background-color: #64b91e;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Idara Ashraful Uloom Results 2024</h1>
+        <h2>🔍 طالب علم کی رپورٹ تلاش کریں</h2>
         <form method="post" action="{% url 'search_excel' %}">
             {% csrf_token %}
-            <label for="sheet_name">Select your class:</label>
-            <select name="sheet_name" id="sheet_name">
-                {% for sheet in sheet_names %}
-                    <option value="{{ sheet }}">{{ sheet }}</option>
-                {% endfor %}
-            </select>
-            <label for="search_value">Enter Admission Number:</label>
-            <input type="text" name="search_value" id="search_value">
-            <button type="submit">Search</button>
+            <label for="search_value">داخلہ نمبر درج کریں:</label>
+            <input type="number" name="search_value" id="search_value" required placeholder="مثلاً 12345">
+            <button type="submit">نتیجہ حاصل کریں</button>
         </form>
     </div>
+
 </body>
 </html>
