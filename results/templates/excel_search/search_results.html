@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <title>Student Report Card</title>
     <style>
+        /* Load custom Nastaliq font from static files */
+        @font-face {
+            font-family: 'JameelNooriNastaleeq';
+            src: url("{% static 'results/fonts/JameelNooriNastaleeq.ttf' %}") format('truetype');
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -42,13 +47,13 @@
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #2c3e50; /* Dark blue for heading */
             margin-bottom: 10px;
             font-size: 24px;
         }
         .subheading {
             text-align: center;
-            color: #7f8c8d;
+            color: #7f8c8d; /* Gray for subheading */
             font-size: 16px;
             margin-bottom: 20px;
         }
@@ -57,13 +62,32 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden;
+            position: relative; /* For watermark positioning */
         }
         .section h2 {
-            background-color: #3498db;
+            background-color: #3498db; /* Blue for section headers */
             color: white;
             padding: 10px;
             margin: 0;
             font-size: 18px;
+        }
+        .middle-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{% static 'results/images/Idara logo.jpg' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 70%; /* Adjust size of watermark */
+            opacity: 0.15; /* Transparency for watermark */
+            z-index: 0; /* Behind the content */
+        }
+        .middle-section table {
+            position: relative;
+            z-index: 1; /* Ensure table stays above watermark */
         }
         table {
             width: 100%;
@@ -75,17 +99,21 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background-color: #ecf0f1; /* Light gray for table headers */
+            color: #2c3e50; /* Dark blue for text */
             font-weight: bold;
         }
+        .middle-section th {
+            background-color: transparent; /* Remove background color for middle section headers */
+            color: #2c3e50; /* Keep text color */
+        }
         td {
-            color: #34495e;
+            color: #34495e; /* Darker gray for values */
         }
         .highlight {
             font-weight: bold;
-            color: #c0392b;
-            background-color: #FFD700;
+            color: #f4eeed; /* Red for important values */
+            background-color: #24be3e; /* Gold background */
             padding: 3px 6px;
             border-radius: 5px;
         }
@@ -93,25 +121,61 @@
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #3498db;
+            color: #3498db; /* Blue for link */
             text-decoration: none;
         }
         .back-link:hover {
             text-decoration: underline;
         }
         .error {
-            color: #e74c3c;
+            color: #e74c3c; /* Red for errors */
             text-align: center;
             margin: 20px 0;
+        }
+        .note {
+            font-family: 'JameelNooriNastaleeq', sans-serif; /* Apply Nastaliq font */
+            text-align: center;
+            color: #f01e06; /* Red for note */
+            font-size: 16px; /* Slightly larger for readability */
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px dashed #e74c3c;
+            border-radius: 5px;
+            line-height: 1.5; /* Improve readability for Nastaliq */
+        }
+        .signature-section {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px 0;
+            direction: rtl;
+        }
+        .signature-section p {
+            margin: 0;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .signature-placeholder {
+            width: 200px;
+            height: 50px; /* Space for signature */
+            border-bottom: 1px solid #2c3e50; /* Line for signature */
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .stamp-placeholder {
+            width: 100px;
+            height: 100px; /* Space for stamp */
+            border: 1px dashed #2c3e50; /* Placeholder for stamp */
+            display: inline-block;
+            margin-right: 20px;
+            vertical-align: top;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logos -->
-        <img src="{% static 'images/idara_logo.jpg' %}" class="round-logo" alt="Idara Logo">
+        <img src="{% static 'results/images/Idara logo.jpg' %}" class="round-logo" alt="Idara Logo">
         <div class="header">
-            <img src="{% static 'images/idara_name_logo.jpg' %}" class="name-logo" alt="Idara Name Logo">
+            <img src="{% static 'results/images/Idara NAme logo.jpg' %}" class="name-logo" alt="Idara Name Logo">
         </div>
 
         {% if message %}
@@ -119,10 +183,7 @@
             <a href="{% url 'search_excel' %}" class="back-link">واپس تلاش کریں</a>
         {% else %}
             <h1>ادارہ اشرف العلوم ٹرسٹ سالانہ نتائج 2025</h1>
-            <p class="subheading">
-                کلاس: <span class="highlight">{{ class_name }}</span> | 
-                داخلہ نمبر: <span class="highlight">{{ search_value }}</span>
-            </p>
+            <p class="subheading">کلاس: <span class="highlight">{{ class_name }}</span> | داخلہ نمبر: <span class="highlight">{{ search_value }}</span></p>
 
             <!-- Top Section: Student Details -->
             <div class="section">
@@ -131,25 +192,25 @@
                     {% for key, value in top_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td class="{% if key == 'داخلہ نمبر' or key == 'نام طالب علم' %}highlight{% endif %}">{{ value }}</td>
+                            <td class="{% if key in 'داخلہ نمبر, نام طالب علم' %}highlight{% endif %}">{{ value }}</td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
 
-            <!-- Middle Section: Subject Marks -->
+            <!-- Middle Section: Subject Marks with Transparent Watermark -->
             {% if middle_section_data %}
-                <div class="section">
-                    <h2>مضامین کے نمبرات</h2>
-                    <table>
-                        {% for key, value in middle_section_data.items %}
-                            <tr>
-                                <th>{{ key }}</th>
-                                <td>{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+            <div class="section middle-section">
+                <h2>مضامین کے نمبرات</h2>
+                <table>
+                    {% for key, value in middle_section_data.items %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
             {% endif %}
 
             <!-- Bottom Section: Results Summary -->
@@ -159,13 +220,22 @@
                     {% for key, value in bottom_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td class="{% if key == 'کل نمبرات' or key == 'درجہ (Rank)' %}highlight{% endif %}">{{ value }}</td>
+                            <td class="{% if key in 'ہ, درجہ (Rank)' %}highlight{% endif %}">
+                                {{ value }}
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
 
-            <a href="{% url 'search_excel' %}" class="back-link">دوسرا تلاش کریں</a>
+            <!-- Signature and Stamp Section -->
+            <div class="signature-section">
+                <p>ناظم تعلیمات کے دستخط و مہر</p>
+                <div class="stamp-placeholder"></div>
+                <div class="signature-placeholder"></div>
+            </div>
+
+            <p class="note">نوٹ: آئندہ سال رجوع ہونا چاہتے ہیں تو نتیجہ ساتھ لانا ضروری ہوگا، لباس صرف سفید اور کلی دار کرتا و شلوار نما پائجامہ قابل قبول ہوگا اور موبائل فون ساتھ رکھنے کی بالکل اجازت نہیں رہے گی۔</p>
         {% endif %}
     </div>
 </body>
