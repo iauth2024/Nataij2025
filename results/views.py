@@ -74,7 +74,7 @@ def search_excel(request):
                             'class_name': sheet_name,  # Sheet name as class name
                             'search_value': search_value
                         }
-                        return render(request, 'results/report_card.html', context)
+                        return render(request, 'search_results.html', context)
 
             message = f"کوئی طالب علم داخلہ نمبر '{search_value}' کے ساتھ کسی شیٹ میں نہیں ملا۔"
 
@@ -86,7 +86,7 @@ def search_excel(request):
             message = f"ایک خرابی پیش آئی: {str(e)}"
 
         context = {'message': message}
-        return render(request, 'results/report_card.html', context)
+        return render(request, 'search_results.html', context)
 
     # Render search form for GET requests
-    return render(request, 'results/search_form.html')
+    return render(request, 'search_form.html')

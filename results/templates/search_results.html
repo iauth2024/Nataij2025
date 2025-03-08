@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Student Report Card</title>
     <style>
-        /* Load custom Nastaliq font from static files */
         @font-face {
             font-family: 'JameelNooriNastaleeq';
             src: url("{% static 'results/fonts/JameelNooriNastaleeq.ttf' %}") format('truetype');
@@ -15,14 +14,16 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 20px;
-            direction: rtl; /* Right-to-left for Urdu */
+            padding: 0;
+            direction: rtl;
         }
         .container {
-            max-width: 800px;
+            width: 794px; /* A4 width at 96 DPI */
+            height: 1123px; /* A4 height at 96 DPI */
             margin: 0 auto;
             background-color: white;
             padding: 20px;
+            box-sizing: border-box;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             position: relative;
@@ -30,46 +31,46 @@
         }
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .header img {
             max-width: 100%;
         }
         .name-logo {
-            width: 300px; /* Adjust as needed */
+            width: 280px;
             margin-bottom: 10px;
         }
         .round-logo {
-            width: 120px; /* Adjust as needed */
+            width: 100px;
             position: absolute;
             top: 10px;
             left: 10px;
         }
         h1 {
             text-align: center;
-            color: #2c3e50; /* Dark blue for heading */
+            color: #2c3e50;
             margin-bottom: 10px;
-            font-size: 24px;
+            font-size: 22px;
         }
         .subheading {
             text-align: center;
-            color: #7f8c8d; /* Gray for subheading */
-            font-size: 16px;
-            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
         .section {
-            margin: 20px 0;
+            margin: 15px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden;
-            position: relative; /* For watermark positioning */
+            position: relative;
         }
         .section h2 {
-            background-color: #3498db; /* Blue for section headers */
+            background-color: #3498db;
             color: white;
-            padding: 10px;
+            padding: 8px;
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
         }
         .middle-section::before {
             content: '';
@@ -81,93 +82,166 @@
             background-image: url("{% static 'results/images/Idara logo.jpg' %}");
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 70%; /* Adjust size of watermark */
-            opacity: 0.15; /* Transparency for watermark */
-            z-index: 0; /* Behind the content */
+            background-size: 60%;
+            opacity: 0.15;
+            z-index: 0;
         }
         .middle-section table {
             position: relative;
-            z-index: 1; /* Ensure table stays above watermark */
+            z-index: 1;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 14px;
         }
         th, td {
-            padding: 12px;
+            padding: 8px;
             text-align: right;
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #ecf0f1; /* Light gray for table headers */
-            color: #2c3e50; /* Dark blue for text */
+            background-color: #ecf0f1;
+            color: #2c3e50;
             font-weight: bold;
         }
         .middle-section th {
-            background-color: transparent; /* Remove background color for middle section headers */
-            color: #2c3e50; /* Keep text color */
+            background-color: transparent;
+            color: #2c3e50;
         }
         td {
-            color: #34495e; /* Darker gray for values */
+            color: #0e0e0e;
         }
         .highlight {
             font-weight: bold;
-            color: #f4eeed; /* Red for important values */
-            background-color: #24be3e; /* Gold background */
-            padding: 3px 6px;
-            border-radius: 5px;
+            color: #f4eeed;
+            background-color: #24be3e;
+            padding: 2px 4px;
+            border-radius: 3px;
         }
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 20px;
-            color: #3498db; /* Blue for link */
+            margin-top: 15px;
+            color: #3498db;
             text-decoration: none;
+            font-size: 14px;
         }
         .back-link:hover {
             text-decoration: underline;
         }
         .error {
-            color: #e74c3c; /* Red for errors */
+            color: #e74c3c;
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
+            font-size: 14px;
         }
         .note {
-            font-family: 'JameelNooriNastaleeq', sans-serif; /* Apply Nastaliq font */
+            font-family: 'JameelNooriNastaleeq', sans-serif;
             text-align: center;
-            color: #f01e06; /* Red for note */
-            font-size: 16px; /* Slightly larger for readability */
-            margin-top: 20px;
-            padding: 10px;
+            color: #f01e06;
+            font-size: 14px;
+            margin-top: 15px;
+            padding: 8px;
             border: 1px dashed #e74c3c;
             border-radius: 5px;
-            line-height: 1.5; /* Improve readability for Nastaliq */
+            line-height: 1.4;
         }
         .signature-section {
             text-align: left;
-            margin-top: 20px;
-            padding: 20px 0;
+            margin-top: 15px;
+            padding: 15px 0;
             direction: rtl;
         }
         .signature-section p {
             margin: 0;
-            font-size: 16px;
+            font-size: 14px;
             color: #2c3e50;
         }
-        .signature-placeholder {
-            width: 200px;
-            height: 50px; /* Space for signature */
-            border-bottom: 1px solid #2c3e50; /* Line for signature */
-            display: inline-block;
+        .stamp-img {
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+            vertical-align: top;
+        }
+        .signature-img {
+            width: 150px;
+            height: 50px;
             margin-top: 10px;
         }
-        .stamp-placeholder {
-            width: 100px;
-            height: 100px; /* Space for stamp */
-            border: 1px dashed #2c3e50; /* Placeholder for stamp */
-            display: inline-block;
-            margin-right: 20px;
-            vertical-align: top;
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                box-shadow: none;
+                border-radius: 0;
+                border: 1px solid #000;
+            }
+            .round-logo {
+                width: 25mm;
+            }
+            .name-logo {
+                width: 70mm;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .subheading {
+                font-size: 12px;
+            }
+            .section {
+                border: 1px solid #000;
+                border-radius: 0;
+            }
+            .section h2 {
+                font-size: 14px;
+                background-color: #3498db;
+            }
+            .middle-section::before {
+        display: block !important; /* Ensure watermark prints */
+        opacity: 0.15; /* Keep it faint */
+        background-size: 60%;
+            }
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                border-bottom: 1px solid #000;
+            }
+            .highlight {
+                padding: 2px 4px;
+            }
+            .note {
+                font-size: 12px;
+                border: 1px dashed #000;
+            }
+            .signature-section p {
+                font-size: 12px;
+            }
+            .stamp-img {
+                width: 20mm;
+                height: 20mm;
+            }
+            .signature-img {
+                width: 40mm;
+                height: 15mm;
+            }
+            @page {
+                margin: 0;
+            }
+            * {
+                -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -198,7 +272,7 @@
                 </table>
             </div>
 
-            <!-- Middle Section: Subject Marks with Transparent Watermark -->
+            <!-- Middle Section: Subject Marks -->
             {% if middle_section_data %}
             <div class="section middle-section">
                 <h2>مضامین کے نمبرات</h2>
@@ -206,7 +280,7 @@
                     {% for key, value in middle_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td>{{ value }}</td>
+                            <td><strong>{{ value }}</strong></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -220,9 +294,7 @@
                     {% for key, value in bottom_section_data.items %}
                         <tr>
                             <th>{{ key }}</th>
-                            <td class="{% if key in 'ہ, درجہ (Rank)' %}highlight{% endif %}">
-                                {{ value }}
-                            </td>
+                            <td class="{% if key in 'ہ, درجہ (Rank)' %}highlight{% endif %}">{{ value }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -231,8 +303,8 @@
             <!-- Signature and Stamp Section -->
             <div class="signature-section">
                 <p>ناظم تعلیمات کے دستخط و مہر</p>
-                <div class="stamp-placeholder"></div>
-                <div class="signature-placeholder"></div>
+                <img src="{% static 'results/images/Talimat Stamp.jpg' %}" class="stamp-img" alt="Talimat Stamp">
+                <img src="{% static 'results/images/Nazim E Talimat esign.jpg' %}" class="signature-img" alt="Nazim E Talimat Signature">
             </div>
 
             <p class="note">نوٹ: آئندہ سال رجوع ہونا چاہتے ہیں تو نتیجہ ساتھ لانا ضروری ہوگا، لباس صرف سفید اور کلی دار کرتا و شلوار نما پائجامہ قابل قبول ہوگا اور موبائل فون ساتھ رکھنے کی بالکل اجازت نہیں رہے گی۔</p>

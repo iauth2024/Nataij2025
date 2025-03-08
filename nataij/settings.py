@@ -8,8 +8,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4ob7tw@i86m2*@!ifs_3k3owi'
-DEBUG = False  # Set to False in production, True for local testing
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost', 'your-production-domain.com']
+DEBUG = True  # Set to False in production, True for local testing
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
