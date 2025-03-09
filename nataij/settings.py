@@ -8,8 +8,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4ob7tw@i86m2*@!ifs_3k3owi'
-DEBUG = False  # Set to False in production, True for local testing
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
+DEBUG = os.getenv("DEBUG", "True") == "True"  # Use environment variable for flexibility
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,7 +24,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -33,7 +33,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'nataij.urls'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 TEMPLATES = [
     {
@@ -73,7 +72,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "results" / "static"/ "results"]
+STATICFILES_DIRS = [BASE_DIR / "results" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
