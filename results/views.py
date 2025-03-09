@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-EXCEL_FILE_PATH = "C:/nataij/results/Nateeja.xlsx"
+EXCEL_FILE_PATH = BASE_DIR / "results" / "Nateeja.xlsx"
 EXCEL_DATA = None
 
 def load_excel_data():

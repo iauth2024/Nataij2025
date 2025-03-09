@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4ob7tw@i86m2*@!ifs_3k3owi'
 DEBUG = os.getenv("DEBUG", "True") == "True"  # Use environment variable for flexibility
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-
+EXCEL_FILE_PATH = BASE_DIR / "results" / "Nateeja.xlsx"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
