@@ -4,10 +4,8 @@ from django.shortcuts import render
 from django.conf import settings
 import logging
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
-# Cache Excel data at startup
 EXCEL_FILE_PATH = os.path.join(settings.BASE_DIR, 'results', 'Nateeja.xlsx')
 EXCEL_DATA = None
 
@@ -24,14 +22,12 @@ def load_excel_data():
         logger.exception("Failed to load Excel data: %s", str(e))
         raise
 
-# Load data on startup (call this in your app’s ready() method or similar)
 if EXCEL_DATA is None:
     load_excel_data()
 
 def search_excel(request):
     if request.method == 'POST':
         try:
-            # Get search value and convert to integer
             search_value_raw = request.POST.get('search_value', '').strip()
             if not search_value_raw:
                 raise ValueError("Please enter an admission number.")
@@ -41,25 +37,25 @@ def search_excel(request):
             if EXCEL_DATA is None:
                 raise FileNotFoundError("Excel data not loaded.")
 
-            # Iterate through cached sheets
             for sheet_name, df in EXCEL_DATA.items():
+                # Work on a copy to avoid modifying cached data
+                df = df.copy()
+                logger.debug("Processing sheet: %s", sheet_name)
+                
                 # Clean DataFrame
                 df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
                 rename_dict = {col: "درجہ (Rank)" for col in df.columns if "درجہ" in col and "1" in col}
-                df.rename(columns=rename_dict, inplace=True)
+                df = df.rename(columns=rename_dict)  # Reassign instead of inplace=True
 
-                # Search for student
                 if 'داخلہ نمبر' in df.columns:
                     result = df[df['داخلہ نمبر'] == search_value]
                     if not result.empty:
                         result_dict = result.iloc[0].to_dict()
 
-                        # Remove unwanted averages
                         result_dict.pop("جائزہ اوسط", None)
                         result_dict.pop("اوسط نمبر", None)
                         result_dict.pop("اوسط نمبر.1", None)
 
-                        # Format numerical values
                         for key, value in result_dict.items():
                             if isinstance(value, (int, float)) and key not in ["داخلہ نمبر", "رول نمبر"]:
                                 if key == "کل اوسط":
@@ -67,11 +63,9 @@ def search_excel(request):
                                 elif pd.notna(value):
                                     result_dict[key] = int(value)
 
-                        # Handle "درجہ.1" renaming
                         if "درجہ.1" in result_dict:
                             result_dict["درجہ (Rank)"] = result_dict.pop("درجہ.1")
 
-                        # Define sections
                         top_section_keys = ["ہال ٹکٹ نمبر", "داخلہ نمبر", "شعبہ", "درجہ", "نمبر شمار", "نام طالب علم"]
                         bottom_section_keys = ["کل نمبرات", "فیصد", "درجۂ کامیابی", "پوزیشن", "امتیازی پوزیشن", "درجہ (Rank)", "کل اوسط"]
                         visible_columns = top_section_keys + bottom_section_keys
@@ -89,7 +83,10 @@ def search_excel(request):
                             'class_name': sheet_name,
                             'search_value': search_value
                         }
+                        logger.info("Rendering results for %d", search_value)
                         return render(request, 'search_results.html', context)
+                else:
+                    logger.warning("Column 'داخلہ نمبر' not found in sheet: %s", sheet_name)
 
             message = f"کوئی طالب علم داخلہ نمبر '{search_value}' کے ساتھ کسی شیٹ میں نہیں ملا۔"
 
@@ -100,8 +97,13 @@ def search_excel(request):
         except Exception as e:
             logger.exception("Error processing request: %s", str(e))
             message = f"ایک خرابی پیش آئی: {str(e)}"
+            # Ensure a response is returned even on error
+            context = {'message': message}
+            return render(request, 'search_results.html', context)
 
         context = {'message': message}
         return render(request, 'search_results.html', context)
 
     return render(request, 'search_form.html')
+
+
