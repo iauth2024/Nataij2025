@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 EXCEL_FILE_PATH = os.getenv('EXCEL_FILE_PATH', os.path.join(settings.BASE_DIR, 'results', 'Nateeja.xlsx'))
-
+logger.debug("Excel file path: %s, exists: %s", EXCEL_FILE_PATH, os.path.exists(EXCEL_FILE_PATH))
 def load_excel_data():
     try:
         if not os.path.exists(EXCEL_FILE_PATH):
