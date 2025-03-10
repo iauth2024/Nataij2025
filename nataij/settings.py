@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # ✅ Allow local and production domains
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'nataij2025.onrender.com,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'nataij2025.onrender.com','localhost','127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
