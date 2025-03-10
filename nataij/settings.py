@@ -4,12 +4,18 @@ Django settings for nataij project.
 
 import os
 from pathlib import Path
+import dj_database_url  # ✅ Required for PostgreSQL on Render
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4ob7tw@i86m2*@!ifs_3k3owi'
-DEBUG = os.getenv('DEBUG', 'False') == 'True'  # Set via environment variable; False in production
-ALLOWED_HOSTS = ['nataij2025.onrender.com', 'localhost', '127.0.0.1']
+# ✅ Keep secret key hidden in production (use environment variable)
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-2au_4jgf7*mxddvcblo(75=b(4ob7tw@i86m2*@!ifs_3k3owi')
+
+# ✅ Debug mode should be False in production
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+# ✅ Allow local and production domains
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'nataij2025.onrender.com,localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,11 +57,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'nataij.wsgi.application'
 
+# ✅ PostgreSQL for Render, SQLite for local development
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -70,8 +76,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# ✅ Static files settings (Render + local)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "results" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# ✅ Media files (for Nateeja.xlsx and uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ✅ Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
